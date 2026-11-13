@@ -1,0 +1,23 @@
+name: 校验
+
+on:
+  push:
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 24
+          package-manager-cache: false
+      - name: 检查脚本与运行回归测试
+        run: |
+          node --check global.js
+          node scripts/assemble.js --check
+          node --test tests/*.test.js
